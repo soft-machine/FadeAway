@@ -37,8 +37,6 @@ pwm.set_pwm_freq(60)
 
 #functions to draw characters
 def drawA():
-    print "hello from A"
-    sleep(2)
     moveOff(0, letterHeight)
     moveOn(letterWidth/2, letterHeight*-1)
     moveOn(letterWidth/2, letterHeight)
