@@ -2,9 +2,15 @@ from __future__ import division
 from time import sleep
 import time
 import Adafruit_PCA9685
+import RPi.GPIO as gpio
 
 #Initialise the PCA9685 using the default address (0x40).
 pwm = Adafruit_PCA9685.PCA9685()
+
+#setup GPIO pin for laser
+laserPin = 22
+gpio.setmode(gpio.BCM)
+gpio.setup(laserPin, gpio.OUT)
 
 # Configure min and max servo pulse lengths
 servo_min = 200  # Min pulse length out of 4096
@@ -24,13 +30,11 @@ yHighBoundary = 600
 xPos = xLowBoundary
 yPos = yLowBoundary
 
-#laserPin = 7
+
 xServoPin = 0
 yServoPin = 1
 
 inString = ""
-
-#pinMode(laserPin, OUTPUT)
 
 #Set frequency to 60hz, good for servos.
 pwm.set_pwm_freq(60)
@@ -369,7 +373,7 @@ def drawNine():
 def moveOn(xGo, yGo):
     global xPos
     global yPos
-    #digitalWrite(laserPin, HIGH)
+    gpio.output(laserPin, gpio.HIGH)
     xPos = xPos + xGo
     yPos = yPos + yGo
     xPos = int(round(xPos))
@@ -379,7 +383,7 @@ def moveOn(xGo, yGo):
     pwm.set_pwm(xServoPin, 0, xPos)
     pwm.set_pwm(yServoPin, 0, yPos)
     sleep(.075)
-    #digitalWrite(laserPin, LOW)
+    gpio.output(laserPin, gpio.LOW)
 
 def moveOff (xGo, yGo):
     global xPos
@@ -395,7 +399,7 @@ def moveOff (xGo, yGo):
 def updatePosition():
     pwm.set_pwm(xServoPin, 0, xPos)
     pwm.set_pwm(yServoPin, 0, yPos)
-    delay(75)
+    sleep(.075)
 
 
 #Char Dictionary
